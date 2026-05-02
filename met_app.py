@@ -1,8 +1,8 @@
 """
 The Met · Personal Tour — Final Version
 =========================================
-Phase 0 (Landing/Must-Sees): Warm cream + gold editorial theme
-Phase 1 (Rating) + Phase 2 (Results): Dark premium purple theme
+Phase 0 (Landing): Exact warm CSS from original snippet
+Phase 1 + 2: Dark premium purple theme
 IndexError fixed: df truncated to feature_matrix row count
 Iconic artworks excluded from rating queue
 """
@@ -21,79 +21,180 @@ warnings.filterwarnings('ignore')
 # Page config
 # ══════════════════════════════════════════════════════════════════════════════
 st.set_page_config(
-    page_title="The Met · Personal Tour",
-    page_icon="🏛️",
+    page_title="Met Art Recommender",
+    page_icon="🎨",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # ══════════════════════════════════════════════════════════════════════════════
-# CSS — injected early, phase-specific overrides applied per phase
+# CSS — Phase 0 uses the exact original warm CSS
+#       Phases 1 & 2 inject dark overrides on top
 # ══════════════════════════════════════════════════════════════════════════════
-SHARED_CSS = """
+
+# ── EXACT original warm CSS (unchanged) ──────────────────────────────────────
+WARM_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap');
 
-#MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 2.5rem 3.5rem !important; max-width: 1400px !important; }
-
-/* ══ PHASE 0 — WARM CREAM THEME ══ */
-.phase-light {
-    /* Applied via body class swap not possible in Streamlit,
-       so we use specific class names for light-phase elements */
-}
-
-/* Landing hero */
-.lp-eyebrow {
+html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #9B8B6E;
-    margin-bottom: 0.75rem;
-    display: block;
+    background-color: #FAFAF8;
 }
-.lp-title {
+.main-title {
     font-family: 'Playfair Display', serif;
-    font-size: 3.6rem;
+    font-size: 2.8rem;
     font-weight: 700;
     color: #1a1a2e;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
 }
-.lp-subtitle {
-    font-size: 1.05rem;
+.subtitle {
+    font-size: 1.1rem;
     color: #6b7280;
     font-weight: 300;
     margin-bottom: 2rem;
-    line-height: 1.6;
 }
-.lp-section-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
+.artwork-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 1rem;
+}
+.dept-tag {
+    background: #EEF2FF;
+    color: #4338CA;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.rating-love  { background: #FFF7ED; border: 2px solid #F59E0B; }
+.rating-like  { background: #F0FDF4; border: 2px solid #22C55E; }
+.rating-skip  { background: #F9FAFB; border: 1px solid #E5E7EB; }
+.progress-bar {
+    background: #EEF2FF;
+    border-radius: 8px;
+    height: 8px;
+    margin: 0.5rem 0;
+}
+
+/* Hide Streamlit branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+.section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #9B8B6E;
     margin-bottom: 0.5rem;
-    display: block;
 }
-.lp-section-title {
+.must-see-banner {
+    background: linear-gradient(135deg, #1C1C1C 0%, #2D2416 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    color: white;
+    margin-bottom: 2rem;
+}
+.must-see-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.7rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #1a1a2e;
+    color: #F5E6C8;
     margin-bottom: 0.25rem;
 }
-.lp-body {
+.gold-badge {
+    background: linear-gradient(135deg, #B8960C, #D4AF37);
+    color: #1C1C1C;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.dept-pill {
+    background: #F0EBE1;
+    color: #5C4A2A;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+.artwork-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #E8E0D5;
+    line-height: 1;
+}
+.rating-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #1C1C1C;
+    margin-bottom: 1rem;
+}
+.desc-box {
+    background: #F5F0E8;
+    border-left: 3px solid #D4AF37;
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.2rem;
+    margin: 0.75rem 0;
     font-size: 0.88rem;
-    color: #6b7280;
-    font-weight: 300;
+    color: #3D3D3D;
     line-height: 1.7;
 }
+.no-image-box {
+    background: #1C1C1C;
+    border-radius: 12px;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+.score-ring {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #B8960C;
+}
+.roadmap-dept {
+    background: white;
+    border: 1px solid #E8E0D5;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+.why-box {
+    background: linear-gradient(135deg, #FFF8E7, #FFF3D4);
+    border: 1px solid #E8C84A;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: #5C4A00;
+    margin-top: 0.75rem;
+}
+.content-flag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    margin-right: 4px;
+}
+.divider {
+    border: none;
+    border-top: 1px solid #E8E0D5;
+    margin: 2rem 0;
+}
 
-/* Must-see card — warm cream */
+/* Must-see cards — warm cream */
 .ms-card {
     background: #FDFAF5;
     border: 1px solid #E8DDD0;
@@ -104,10 +205,9 @@ SHARED_CSS = """
     min-height: 230px;
 }
 .ms-num {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.58rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #D4B870;
     margin-bottom: 0.7rem;
@@ -121,7 +221,6 @@ SHARED_CSS = """
     margin-bottom: 0.2rem;
 }
 .ms-artist {
-    font-family: 'Inter', sans-serif;
     font-size: 0.76rem;
     font-weight: 500;
     color: #B8860B;
@@ -129,14 +228,12 @@ SHARED_CSS = """
     margin-bottom: 0.75rem;
 }
 .ms-desc {
-    font-family: 'Inter', sans-serif;
     font-size: 0.79rem;
     color: #6b7280;
     line-height: 1.65;
     margin-bottom: 0.75rem;
 }
 .ms-footer {
-    font-family: 'Inter', sans-serif;
     font-size: 0.7rem;
     color: #9B8B6E;
     border-top: 1px solid #EDE3D8;
@@ -144,7 +241,7 @@ SHARED_CSS = """
 }
 .ms-footer a { color: #B8860B; text-decoration: none; }
 
-/* CTA step 2 box */
+/* CTA box */
 .cta-box {
     background: #FDF6EC;
     border: 1px solid #E8DDD0;
@@ -162,7 +259,7 @@ SHARED_CSS = """
 }
 .cta-body { font-size: 0.88rem; color: #6b7280; font-weight: 300; }
 
-/* Info note — warm */
+/* Warm info note */
 .warm-note {
     background: #FDF6EC;
     border: 1px solid #E8C870;
@@ -173,196 +270,14 @@ SHARED_CSS = """
     line-height: 1.6;
     margin-bottom: 1.25rem;
 }
-
-/* ══ PHASE 1 & 2 — DARK PURPLE THEME ══ */
-
-/* Background override for dark phases */
-.dark-phase-bg {
-    background: #0F0F13;
-}
-
-.dp-eyebrow {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.61rem;
-    font-weight: 600;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #8B7FD4;
-    display: block;
-    margin-bottom: 0.6rem;
-}
-.dp-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3.2rem;
-    font-weight: 300;
-    line-height: 1.08;
-    color: #EDE8F5;
-    letter-spacing: -0.01em;
-    margin-bottom: 0.5rem;
-}
-.dp-title-sm {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
-    font-weight: 300;
-    color: #EDE8F5;
-    margin-bottom: 0.25rem;
-}
-.dp-body {
-    font-size: 0.84rem;
-    font-weight: 300;
-    color: #6A6278;
-    line-height: 1.7;
-}
-.dp-rule {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 2rem 0 1.2rem 0;
-}
-.dp-rule-text {
-    font-size: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #8B7FD4;
-    white-space: nowrap;
-}
-.dp-rule-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, #2E2A3E 0%, transparent 100%);
-}
-
-/* Dark must-see card (results page) */
-.dp-ms-card {
-    background: #13111C;
-    border: 1px solid #23202E;
-    border-top: 2px solid #7B6FD0;
-    border-radius: 6px;
-    padding: 1.3rem 1.4rem;
-    margin-bottom: 1rem;
-    min-height: 210px;
-}
-.dp-ms-num  { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #3A3460; margin-bottom: 0.7rem; }
-.dp-ms-title { font-family: 'Cormorant Garamond', serif; font-size: 1.08rem; font-weight: 600; color: #EDE8F5; line-height: 1.3; margin-bottom: 0.2rem; }
-.dp-ms-artist { font-size: 0.76rem; font-weight: 500; color: #8B7FD4; letter-spacing: 0.04em; margin-bottom: 0.75rem; }
-.dp-ms-desc { font-size: 0.79rem; color: #5A5268; line-height: 1.65; margin-bottom: 0.75rem; }
-.dp-ms-footer { font-size: 0.7rem; color: #3A3460; border-top: 1px solid #1E1C28; padding-top: 0.55rem; }
-.dp-ms-footer a { color: #7B6FD0; text-decoration: none; }
-
-/* Rating counter */
-.rating-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 5rem;
-    font-weight: 300;
-    color: #1E1C28;
-    line-height: 1;
-}
-.rating-num-frac { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #2A2538; }
-.rating-q {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-style: italic;
-    font-weight: 300;
-    color: #6A6278;
-    margin: 0.5rem 0 1.25rem 0;
-}
-
-/* Artwork title/artist */
-.art-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    font-weight: 400;
-    color: #EDE8F5;
-    line-height: 1.2;
-    margin-bottom: 0.2rem;
-}
-.art-artist { font-size: 0.82rem; color: #8B7FD4; letter-spacing: 0.05em; margin-bottom: 1.1rem; }
-
-/* Description box */
-.desc-box {
-    background: #0D0C16;
-    border-left: 2px solid #5A50A8;
-    padding: 1rem 1.2rem;
-    margin: 1rem 0;
-    font-size: 0.82rem;
-    color: #6A6278;
-    line-height: 1.75;
-    border-radius: 0 4px 4px 0;
-}
-
-/* Badges */
-.badge-purple { display: inline-block; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 9px; border: 1px solid #7B6FD0; border-radius: 2px; color: #A89EE8; margin-right: 6px; }
-.badge-dim    { display: inline-block; font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 9px; border: 1px solid #2E2A3E; border-radius: 2px; color: #4A4460; margin-right: 6px; }
-
-/* Score */
-.score-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: #A89EE8; line-height: 1; }
-.score-lbl { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #3A3460; }
-
-/* Why box */
-.why-box {
-    background: #0E0D18;
-    border-left: 2px solid #7B6FD0;
-    padding: 0.7rem 1rem;
-    font-size: 0.79rem;
-    color: #8B80C0;
-    line-height: 1.65;
-    margin-top: 0.75rem;
-    border-radius: 0 3px 3px 0;
-}
-
-/* Taste chips */
-.taste-chip { display: inline-block; background: #13111C; border: 1px solid #23202E; padding: 4px 12px; font-size: 0.74rem; color: #6A6278; border-radius: 3px; margin: 2px 4px 2px 0; }
-
-/* Content flag */
-.cflag { display: inline-block; padding: 2px 8px; font-size: 0.65rem; font-weight: 500; background: #180F1A; border: 1px solid #4A1A3A; color: #C06080; border-radius: 2px; margin-right: 4px; }
-
-/* Tour stats */
-.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: #A89EE8; line-height: 1; }
-.stat-lbl { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #3A3460; margin-top: 0.25rem; }
-
-/* Streamlit component overrides — DARK (used for phases 1 & 2) */
 </style>
 """
 
-# Phase-specific body CSS injected dynamically
-LIGHT_BODY_CSS = """
+# ── Dark override injected for phases 1 & 2 ──────────────────────────────────
+DARK_CSS = """
 <style>
-html, body, .stApp,
-[data-testid="stAppViewContainer"],
-[data-testid="stMain"],
-[data-testid="stSidebar"],
-.main, .block-container, [class*="css"] {
-    background-color: #FAFAF8 !important;
-    color: #1a1a2e !important;
-    font-family: 'Inter', sans-serif !important;
-}
-p, span, label, li     { color: #1a1a2e !important; }
-h1,h2,h3,h4,h5,h6      { color: #1a1a2e !important; }
-.stCaption p,
-[data-testid="stCaptionContainer"] p { color: #6b7280 !important; }
-[data-testid="stExpander"] { background: #FDF9F4 !important; border: 1px solid #E8DDD0 !important; border-radius: 6px !important; }
-[data-testid="stExpander"] summary { color: #1a1a2e !important; }
-[data-testid="stInfo"] { background: #FDF6EC !important; border: 1px solid #E8C870 !important; }
-[data-testid="stInfo"] p { color: #7A6020 !important; font-size: 0.82rem !important; }
-[data-testid="stProgress"] > div { background: #EDE3D8 !important; }
-[data-testid="stProgress"] > div > div { background: linear-gradient(90deg, #C9A55A, #E8C870) !important; }
-.stButton > button {
-    background: #1a1a2e !important; border: none !important; color: #FDFAF5 !important;
-    font-family: 'Inter', sans-serif !important; font-size: 0.78rem !important;
-    font-weight: 500 !important; letter-spacing: 0.1em !important;
-    text-transform: uppercase !important; padding: 0.75rem 1.5rem !important;
-    border-radius: 4px !important; width: 100% !important;
-}
-.stButton > button:hover { background: #C9A55A !important; color: #1a1a2e !important; }
-[data-testid="stSelectbox"] > div > div { background: #FDF9F4 !important; border-color: #E8DDD0 !important; color: #1a1a2e !important; }
-[data-testid="stCheckbox"] label p { color: #6b7280 !important; }
-hr { border-color: #E8DDD0 !important; }
-</style>
-"""
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
-DARK_BODY_CSS = """
-<style>
 html, body, .stApp,
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"],
@@ -376,13 +291,16 @@ p, span, label, li     { color: #D4CCE0 !important; }
 h1,h2,h3,h4,h5,h6      { color: #EDE8F5 !important; }
 .stCaption p,
 [data-testid="stCaptionContainer"] p { color: #6A6278 !important; font-size: 0.8rem !important; }
+hr { border-color: #23202E !important; }
+.block-container { padding: 2.5rem 3.5rem !important; max-width: 1400px !important; }
+
 [data-testid="stExpander"] { background: #16141E !important; border: 1px solid #23202E !important; border-radius: 6px !important; margin-bottom: 6px !important; }
 [data-testid="stExpander"] summary { color: #C0B8D8 !important; font-size: 0.86rem !important; }
 [data-testid="stExpander"] summary:hover { color: #A89EE8 !important; }
-[data-testid="stInfo"] { background: #100F1A !important; border: 1px solid #2E2050 !important; border-radius: 6px !important; }
-[data-testid="stInfo"] p { color: #9B8FD8 !important; font-size: 0.82rem !important; }
-[data-testid="stProgress"] > div { background: #1E1C28 !important; border-radius: 4px !important; }
-[data-testid="stProgress"] > div > div { background: linear-gradient(90deg, #7B6FD0, #A89EE8) !important; border-radius: 4px !important; }
+[data-testid="stInfo"] { background: #100F1A !important; border: 1px solid #2E2050 !important; }
+[data-testid="stInfo"] p { color: #9B8FD8 !important; }
+[data-testid="stProgress"] > div { background: #1E1C28 !important; }
+[data-testid="stProgress"] > div > div { background: linear-gradient(90deg, #7B6FD0, #A89EE8) !important; }
 .stButton > button {
     background: transparent !important; border: 1px solid #8B7FD4 !important;
     color: #A89EE8 !important; font-family: 'Inter', sans-serif !important;
@@ -390,16 +308,60 @@ h1,h2,h3,h4,h5,h6      { color: #EDE8F5 !important; }
     letter-spacing: 0.12em !important; text-transform: uppercase !important;
     padding: 0.65rem 1.5rem !important; border-radius: 3px !important; width: 100% !important;
 }
-.stButton > button:hover { background: #8B7FD4 !important; color: #0F0F13 !important; border-color: #8B7FD4 !important; }
+.stButton > button:hover { background: #8B7FD4 !important; color: #0F0F13 !important; }
 [data-testid="stSelectbox"] > div > div { background: #16141E !important; border-color: #2E2A3E !important; color: #D4CCE0 !important; }
-[data-testid="stSlider"] p { color: #6A6278 !important; }
-[data-testid="stCheckbox"] label p { color: #6A6278 !important; font-size: 0.82rem !important; }
-hr { border-color: #23202E !important; }
+[data-testid="stCheckbox"] label p { color: #6A6278 !important; }
+
+/* Dark-phase typography */
+.section-label { font-size: 0.61rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #8B7FD4; display: block; margin-bottom: 0.6rem; }
+.dp-title { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 300; line-height: 1.08; color: #EDE8F5; margin-bottom: 0.5rem; }
+.dp-title-sm { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: #EDE8F5; margin-bottom: 0.25rem; }
+.dp-body { font-size: 0.84rem; font-weight: 300; color: #6A6278; line-height: 1.7; }
+.dp-rule { display: flex; align-items: center; gap: 1rem; margin: 2rem 0 1.2rem 0; }
+.dp-rule-text { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: #8B7FD4; white-space: nowrap; }
+.dp-rule-line { flex: 1; height: 1px; background: linear-gradient(90deg, #2E2A3E 0%, transparent 100%); }
+
+/* Dark must-see cards */
+.dp-ms-card { background: #13111C; border: 1px solid #23202E; border-top: 2px solid #7B6FD0; border-radius: 6px; padding: 1.3rem 1.4rem; margin-bottom: 1rem; min-height: 210px; }
+.dp-ms-num  { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #3A3460; margin-bottom: 0.7rem; }
+.dp-ms-title { font-family: 'Cormorant Garamond', serif; font-size: 1.08rem; font-weight: 600; color: #EDE8F5; line-height: 1.3; margin-bottom: 0.2rem; }
+.dp-ms-artist { font-size: 0.76rem; font-weight: 500; color: #8B7FD4; letter-spacing: 0.04em; margin-bottom: 0.75rem; }
+.dp-ms-desc { font-size: 0.79rem; color: #5A5268; line-height: 1.65; margin-bottom: 0.75rem; }
+.dp-ms-footer { font-size: 0.7rem; color: #3A3460; border-top: 1px solid #1E1C28; padding-top: 0.55rem; }
+.dp-ms-footer a { color: #7B6FD0; text-decoration: none; }
+
+/* Rating */
+.rating-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: #1E1C28; line-height: 1; }
+.rating-num-frac { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #2A2538; }
+.rating-q { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; font-weight: 300; color: #6A6278; margin: 0.5rem 0 1.25rem 0; }
+.art-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; color: #EDE8F5; line-height: 1.2; margin-bottom: 0.2rem; }
+.art-artist { font-size: 0.82rem; color: #8B7FD4; letter-spacing: 0.05em; margin-bottom: 1.1rem; }
+
+/* Dark desc-box override */
+.desc-box { background: #0D0C16 !important; border-left: 2px solid #5A50A8 !important; color: #6A6278 !important; }
+
+/* Badges */
+.badge-purple { display: inline-block; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 9px; border: 1px solid #7B6FD0; border-radius: 2px; color: #A89EE8; margin-right: 6px; }
+.badge-dim    { display: inline-block; font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 9px; border: 1px solid #2E2A3E; border-radius: 2px; color: #4A4460; margin-right: 6px; }
+
+/* Score */
+.score-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: #A89EE8; line-height: 1; }
+.score-lbl { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #3A3460; }
+
+/* Why box dark override */
+.why-box { background: #0E0D18 !important; border: none !important; border-left: 2px solid #7B6FD0 !important; color: #8B80C0 !important; }
+
+/* Taste chips */
+.taste-chip { display: inline-block; background: #13111C; border: 1px solid #23202E; padding: 4px 12px; font-size: 0.74rem; color: #6A6278; border-radius: 3px; margin: 2px 4px 2px 0; }
+
+/* Content flag dark */
+.cflag { display: inline-block; padding: 2px 8px; font-size: 0.65rem; font-weight: 500; background: #180F1A; border: 1px solid #4A1A3A; color: #C06080; border-radius: 2px; margin-right: 4px; }
+
+/* Stats */
+.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: #A89EE8; line-height: 1; }
+.stat-lbl { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #3A3460; margin-top: 0.25rem; }
 </style>
 """
-
-st.markdown(SHARED_CSS, unsafe_allow_html=True)
-
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Constants
@@ -527,14 +489,17 @@ def reset_session():
     st.rerun()
 
 
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Inject phase CSS
+# Phase 0: warm CSS only (already injected above as WARM_CSS)
+# Phase 1 & 2: dark overrides injected on top
 # ══════════════════════════════════════════════════════════════════════════════
 phase = st.session_state.get('phase', 'must_sees')
-if phase == 'must_sees':
-    st.markdown(LIGHT_BODY_CSS, unsafe_allow_html=True)
-else:
-    st.markdown(DARK_BODY_CSS, unsafe_allow_html=True)
+st.markdown(WARM_CSS, unsafe_allow_html=True)
+if phase != 'must_sees':
+    st.markdown(DARK_CSS, unsafe_allow_html=True)
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -645,9 +610,9 @@ def build_rating_queue(exclude_ids=None):
 # ══════════════════════════════════════════════════════════════════════════════
 with st.sidebar:
     if phase == 'must_sees':
-        st.markdown('<span class="lp-eyebrow">The Met · Personal Tour</span>', unsafe_allow_html=True)
+        st.markdown('<span class="section-label">The Met · Personal Tour</span>', unsafe_allow_html=True)
     else:
-        st.markdown('<span class="dp-eyebrow">The Met · Personal Tour</span>', unsafe_allow_html=True)
+        st.markdown('<span class="section-label">The Met · Personal Tour</span>', unsafe_allow_html=True)
     st.markdown("---")
     n = len(st.session_state.ratings)
     st.progress(min(n / RATING_TARGET, 1.0))
@@ -670,7 +635,7 @@ with st.sidebar:
 # Data not loaded
 # ══════════════════════════════════════════════════════════════════════════════
 if not DATA_LOADED:
-    st.markdown('<div class="lp-title">🏛️ The Met · Personal Tour</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title">🏛️ The Met · Personal Tour</div>', unsafe_allow_html=True)
     st.error("Data files not found. Ensure `met_artworks_clean.csv`, `feature_matrix.pkl`, `tfidf_vectorizer.pkl` are present.")
     st.stop()
 
@@ -684,10 +649,10 @@ if st.session_state.phase == 'must_sees':
     col_hero, col_stats = st.columns([3, 1], gap="large")
 
     with col_hero:
-        st.markdown('<span class="lp-eyebrow">The Metropolitan Museum of Art · New York</span>', unsafe_allow_html=True)
-        st.markdown('<div class="lp-title">Your Personal<br>Museum Tour</div>', unsafe_allow_html=True)
+        st.markdown('<span class="section-label">The Metropolitan Museum of Art · New York</span>', unsafe_allow_html=True)
+        st.markdown('<div class="main-title">Your Personal<br>Museum Tour</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="lp-subtitle">An AI-powered guide built around your taste. '
+            '<div class="subtitle">An AI-powered guide built around your taste. '
             'Rate 20 artworks, and we\'ll generate a personalised tour of the Met — '
             'ranked by predicted enjoyment, with a gallery-by-gallery roadmap.</div>',
             unsafe_allow_html=True)
@@ -708,7 +673,7 @@ if st.session_state.phase == 'must_sees':
     # Content preferences
     cp1, cp2, cp3 = st.columns([3, 1, 1])
     with cp1:
-        st.markdown('<span class="lp-section-label">Before we begin</span>', unsafe_allow_html=True)
+        st.markdown('<span class="section-label">Before we begin</span>', unsafe_allow_html=True)
         st.markdown('<span style="font-size:0.88rem;color:#6b7280;">Set your content preferences:</span>', unsafe_allow_html=True)
     with cp2:
         st.session_state.hide_nudity   = st.checkbox("Exclude nudity",   value=st.session_state.get('hide_nudity', False), key="p0_nudity")
@@ -723,10 +688,10 @@ if st.session_state.phase == 'must_sees':
     must_sees = st.session_state.must_sees_df
 
     # ── Must-sees section ─────────────────────────────────────────────────────
-    st.markdown('<span class="lp-section-label">Non-Negotiables · Always included in your tour</span>', unsafe_allow_html=True)
-    st.markdown('<div class="lp-section-title">⭐ Must-See Masterpieces</div>', unsafe_allow_html=True)
+    st.markdown('<span class="section-label">Non-Negotiables · Always included in your tour</span>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title" style="font-size:1.8rem;">⭐ Must-See Masterpieces</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="lp-body" style="margin-bottom:1rem;">These iconic works are guaranteed in your tour regardless of your ratings. '
+        '<div class="subtitle" style="font-size:0.88rem;" style="margin-bottom:1rem;">These iconic works are guaranteed in your tour regardless of your ratings. '
         'We\'ve intentionally withheld images — experience them for the first time in person.</div>',
         unsafe_allow_html=True)
 
@@ -782,7 +747,7 @@ elif st.session_state.phase == 'rating':
     # Progress header
     hc1, hc2 = st.columns([3, 1])
     with hc1:
-        st.markdown('<span class="dp-eyebrow">Building Your Taste Profile</span>', unsafe_allow_html=True)
+        st.markdown('<span class="section-label">Building Your Taste Profile</span>', unsafe_allow_html=True)
         st.markdown('<div class="dp-title-sm">Rate This Artwork</div>', unsafe_allow_html=True)
         st.progress(n_rated / RATING_TARGET)
         st.markdown(f'<span class="dp-body">{n_rated} of {RATING_TARGET} rated</span>', unsafe_allow_html=True)
@@ -918,7 +883,7 @@ elif st.session_state.phase == 'results':
     must_sees = st.session_state.must_sees_df
 
     # ── Header ───────────────────────────────────────────────────────────────
-    st.markdown('<span class="dp-eyebrow">The Metropolitan Museum of Art · New York</span>', unsafe_allow_html=True)
+    st.markdown('<span class="section-label">The Metropolitan Museum of Art · New York</span>', unsafe_allow_html=True)
     st.markdown('<div class="dp-title">Your Personal Tour</div>', unsafe_allow_html=True)
 
     liked_ids   = [i for i, v in st.session_state.ratings.items() if v >= 1]
