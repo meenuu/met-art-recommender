@@ -37,149 +37,159 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
 
-/* ── Force light theme regardless of Streamlit settings ── */
+/* ── Force light theme ── */
 html, body, [class*="css"],
 .stApp, .main, .block-container,
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"] {
     font-family: 'Inter', sans-serif !important;
-    background-color: #FAFAF8 !important;
-    color: #1C1C1C !important;
+    background-color: #FFFFFF !important;
+    color: #1a1a2e !important;
 }
+p, span, label, li { color: #1a1a2e !important; }
+.stCaption, [data-testid="stCaptionContainer"] p { color: #6b7280 !important; }
 
-/* Force all default Streamlit text to be dark */
-p, span, div, label, li, h1, h2, h3, h4, h5, h6 {
-    color: #1C1C1C !important;
-}
-
-/* Captions slightly lighter but still readable */
-.stCaption, [data-testid="stCaptionContainer"] p {
-    color: #555555 !important;
-}
-
-/* Hide Streamlit branding */
 #MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
+footer    {visibility: hidden;}
+header    {visibility: hidden;}
 
-.hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3.5rem;
-    font-weight: 300;
-    color: #1C1C1C !important;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
-}
-.hero-sub {
-    font-size: 1rem;
-    color: #555555 !important;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-}
-.section-label {
-    font-size: 0.7rem;
+/* ── Typography ── */
+.main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
     font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #9B7B3E !important;
-    margin-bottom: 0.5rem;
+    color: #1a1a2e !important;
+    margin-bottom: 0.2rem;
+    line-height: 1.15;
 }
-.must-see-banner {
-    background: linear-gradient(135deg, #1C1C1C 0%, #2D2416 100%);
-    border-radius: 16px;
-    padding: 2rem;
-    color: white !important;
-    margin-bottom: 2rem;
-}
-.must-see-banner p, .must-see-banner div, .must-see-banner span {
-    color: #C8B89A !important;
-}
-.must-see-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
+.subtitle {
+    font-size: 1.05rem;
+    color: #6b7280 !important;
     font-weight: 300;
-    color: #F5E6C8 !important;
-    margin-bottom: 0.25rem;
+    margin-bottom: 1.5rem;
 }
-.gold-badge {
-    background: linear-gradient(135deg, #B8960C, #D4AF37);
-    color: #1C1C1C !important;
+.section-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e !important;
+    margin: 1.5rem 0 0.25rem 0;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #EEF2FF;
+}
+
+/* ── Must-see card (text-only, no image) ── */
+.must-see-card {
+    background: #FAFBFF;
+    border: 1px solid #E0E7FF;
+    border-left: 4px solid #4338CA;
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+    height: 100%;
+}
+.must-see-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1a2e !important;
+    margin-bottom: 0.15rem;
+}
+.must-see-card-artist {
+    font-size: 0.82rem;
+    color: #4338CA !important;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+}
+.must-see-card-desc {
+    font-size: 0.83rem;
+    color: #374151 !important;
+    line-height: 1.6;
+    margin-bottom: 0.6rem;
+}
+.must-see-card-meta {
+    font-size: 0.75rem;
+    color: #9CA3AF !important;
+}
+
+/* ── Badges ── */
+.badge-must-see {
+    background: #EEF2FF;
+    color: #4338CA !important;
     padding: 2px 10px;
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
-.dept-pill {
-    background: #E8DDD0;
-    color: #5C4A2A !important;
-    padding: 3px 10px;
+.badge-dept {
+    background: #F3F4F6;
+    color: #374151 !important;
+    padding: 2px 10px;
     border-radius: 20px;
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 500;
 }
-.artwork-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 4rem;
-    font-weight: 300;
-    color: #9B8B6E !important;
+.badge-famous {
+    background: #FEF3C7;
+    color: #92400E !important;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+/* ── Rating phase ── */
+.rating-counter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #EEF2FF !important;
     line-height: 1;
 }
 .rating-question {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
     font-weight: 400;
-    color: #1C1C1C !important;
+    color: #1a1a2e !important;
     margin-bottom: 1rem;
 }
+
+/* ── Description box ── */
 .desc-box {
-    background: #F5F0E8;
-    border-left: 3px solid #D4AF37;
+    background: #F9FAFB;
+    border-left: 3px solid #4338CA;
     border-radius: 0 8px 8px 0;
-    padding: 1rem 1.2rem;
+    padding: 0.9rem 1.1rem;
     margin: 0.75rem 0;
-    font-size: 0.88rem;
-    color: #2C2C2C !important;
+    font-size: 0.86rem;
+    color: #374151 !important;
     line-height: 1.7;
 }
-.no-image-box {
-    background: #1C1C1C;
-    border-radius: 12px;
-    min-height: 380px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
+
+/* ── Score ── */
+.score-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4338CA !important;
 }
-.score-ring {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #B8960C;
-}
-.roadmap-dept {
-    background: white;
-    border: 1px solid #E8E0D5;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-}
+
+/* ── Why box ── */
 .why-box {
-    background: linear-gradient(135deg, #FFF8E7, #FFF3D4);
-    border: 1px solid #E8C84A;
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    font-size: 0.85rem;
-    color: #5C4A00;
+    font-size: 0.84rem;
+    color: #3730A3 !important;
     margin-top: 0.75rem;
 }
+
+/* ── Content flags ── */
 .content-flag {
     display: inline-block;
     padding: 2px 8px;
@@ -188,10 +198,17 @@ header {visibility: hidden;}
     font-weight: 500;
     margin-right: 4px;
 }
-.divider {
-    border: none;
-    border-top: 1px solid #E8E0D5;
-    margin: 2rem 0;
+
+/* ── Tour summary box ── */
+.tour-summary {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    color: white !important;
+    margin: 1rem 0;
+}
+.tour-summary p, .tour-summary span, .tour-summary div {
+    color: #E0E7FF !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -775,21 +792,20 @@ if not DATA_LOADED:
 # ══════════════════════════════════════════════════════════════════════════════
 if st.session_state.phase == 'must_sees':
 
-    # Header
-    st.markdown('<div class="hero-sub">The Metropolitan Museum of Art</div>', unsafe_allow_html=True)
-    st.markdown('<div class="hero-title">Your Personal<br>Museum Tour</div>', unsafe_allow_html=True)
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    # Header — v2 Playfair style
+    st.markdown('<div class="main-title">🏛️ Met Museum<br>Personal Tour</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtitle">Your AI-powered guide to the Metropolitan Museum of Art</div>', unsafe_allow_html=True)
 
     # Content preferences
     col_p1, col_p2, col_p3 = st.columns([2, 1, 1])
     with col_p1:
         st.markdown("**Set your content preferences before we begin:**")
     with col_p2:
-        st.session_state.hide_nudity   = st.checkbox("Hide artworks with nudity")
+        st.session_state.hide_nudity   = st.checkbox("Hide nudity")
     with col_p3:
-        st.session_state.hide_violence = st.checkbox("Hide violent imagery")
+        st.session_state.hide_violence = st.checkbox("Hide violence")
 
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown("---")
 
     # Build must-sees
     if st.session_state.must_sees_df is None:
@@ -797,80 +813,62 @@ if st.session_state.phase == 'must_sees':
 
     must_sees = st.session_state.must_sees_df
 
-    # Must-see banner
-    st.markdown("""
-    <div class="must-see-banner">
-        <div style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;
-                    color:#D4AF37;margin-bottom:0.5rem;">Non-Negotiables</div>
-        <div class="must-see-title">Must-See Masterpieces</div>
-        <div style="color:#C8B89A;font-size:0.9rem;margin-top:0.5rem;">
-            These iconic works are automatically included in your tour —
-            celebrated masters and Met highlights you cannot miss.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Honest note about the Met's collection strengths
+    # Section header
+    st.markdown('<div class="section-header">⭐ Non-Negotiable Must-Sees</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="subtitle">These iconic works are automatically included in your tour — '
+        'no matter your ratings. We\'ve intentionally left out images so you can experience '
+        'them in person for the first time. That\'s the whole point.</div>',
+        unsafe_allow_html=True
+    )
     st.info(MET_COLLECTION_NOTE)
+    st.markdown("")
 
-    # Show must-sees in a 3-column grid
+    # Text-only cards in 3-column grid — NO images
     if not must_sees.empty:
         cols = st.columns(3)
         for i, (_, row) in enumerate(must_sees.iterrows()):
             with cols[i % 3]:
-                has_image = row['image_url'] and str(row['image_url']) not in ['', 'nan']
+                year  = str(row.get('year', row.get('objectDate', ''))).strip()
+                dept  = str(row.get('department', ''))
+                desc  = str(row.get('description', ''))
+                flags = str(row.get('content_flags', ''))
+                url   = str(row.get('met_url', ''))
 
-                # Image or dark placeholder
-                if has_image:
-                    st.image(row['image_url'], use_column_width=True)
+                # Build description — use the rich hardcoded one if available
+                if len(desc) > 30 and desc not in ['nan', '']:
+                    display_desc = desc[:280] + ("..." if len(desc) > 280 else "")
                 else:
-                    st.markdown(
-                        f'<div class="no-image-box">'
-                        f'<div>'
-                        f'<div style="font-size:2rem;margin-bottom:0.5rem;">🖼️</div>'
-                        f'<div style="color:#9B8B6E;font-size:0.8rem;">Image restricted</div>'
-                        f'</div></div>',
-                        unsafe_allow_html=True
-                    )
+                    parts = []
+                    if str(row.get('medium','')) not in ['','nan','unknown']:
+                        parts.append(f"Medium: {row['medium']}")
+                    if str(row.get('culture','')) not in ['','nan','unknown']:
+                        parts.append(f"Culture: {row['culture']}")
+                    if str(row.get('era','')) not in ['','nan','Unknown Era','unknown']:
+                        parts.append(f"Era: {row['era'].replace('_',' ').title()}")
+                    display_desc = " · ".join(parts) if parts else f"Part of the Met's {dept} collection."
 
-                # Title + artist
-                st.markdown(
-                    f'<div style="margin-top:0.5rem;">'
-                    f'<span class="gold-badge">Must See</span>'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-                st.markdown(f"**{row['title']}**")
-                if str(row['artist']) not in ['Unknown Artist', 'nan', '']:
-                    st.caption(f"*{row['artist']}*")
+                year_str = f" ({year})" if year and year not in ['nan', ''] else ""
 
-                # Always show description
-                render_description(row)
+                st.markdown(f"""
+<div class="must-see-card">
+    <div class="must-see-card-title">{row['title']}{year_str}</div>
+    <div class="must-see-card-artist">{row['artist']}</div>
+    <div class="must-see-card-desc">{display_desc}</div>
+    <div class="must-see-card-meta">
+        🏛️ {dept}
+        {"&nbsp;&nbsp;·&nbsp;&nbsp;<a href='" + url + "' target='_blank' style='color:#4338CA;'>View on Met ↗</a>" if url not in ['','nan'] else ""}
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-                render_flags(row.get('content_flags', ''))
+                render_flags(flags)
 
-                if row.get('met_url', '') and str(row['met_url']) not in ['', 'nan']:
-                    st.markdown(f"[View on Met ↗]({row['met_url']})")
+    st.markdown("---")
 
-                st.markdown("---")
-
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
-
-    # CTA to start rating
-    st.markdown(
-        '<div style="text-align:center;margin:2rem 0;padding:2rem;'
-        'background:#F5F0E8;border-radius:16px;">'
-        '<div style="font-size:0.7rem;font-weight:700;letter-spacing:0.15em;'
-        'text-transform:uppercase;color:#9B7B3E !important;margin-bottom:1rem;">'
-        'Step 2 of 2</div>'
-        '<div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;'
-        'font-weight:400;color:#1C1C1C !important;margin-bottom:1rem;">'
-        'Now let\'s personalise the rest of your tour</div>'
-        '<div style="color:#444444 !important;font-size:0.95rem;margin-bottom:0;">'
-        'Rate 20 artworks so we can recommend what else you\'ll love at the Met</div>'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    # CTA
+    st.markdown("### Now let's personalise the rest of your tour")
+    st.markdown('<div class="subtitle">Rate 20 artworks so we can recommend everything else you\'ll love at the Met.</div>', unsafe_allow_html=True)
 
     col_cta1, col_cta2, col_cta3 = st.columns([1, 2, 1])
     with col_cta2:
@@ -896,10 +894,10 @@ elif st.session_state.phase == 'rating':
     # Top bar
     col_title, col_prog = st.columns([3, 1])
     with col_title:
-        st.markdown('<div class="hero-sub">Building Your Taste Profile</div>', unsafe_allow_html=True)
-        st.markdown('<div class="hero-title" style="font-size:2.2rem;">Rate This Artwork</div>', unsafe_allow_html=True)
+        st.markdown('<div class="subtitle">Building Your Taste Profile</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-title" style="font-size:2rem;">Rate This Artwork</div>', unsafe_allow_html=True)
     with col_prog:
-        st.markdown(f'<div class="artwork-number">{n_rated + 1}<span style="font-size:1.5rem;color:#B0A090">/{RATING_TARGET}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="rating-counter">{n_rated + 1}<span style="font-size:1.2rem;color:#C7D2FE">/{RATING_TARGET}</span></div>', unsafe_allow_html=True)
         st.progress(n_rated / RATING_TARGET)
 
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
@@ -1062,17 +1060,12 @@ elif st.session_state.phase == 'results':
 
     # ── Header ─────────────────────────────────────────────────────────────────
     st.markdown(
-        '<div style="font-size:1rem;font-weight:600;letter-spacing:0.08em;'
-        'text-transform:uppercase;color:#9B7B3E !important;margin-bottom:0.25rem;">'
+        '<div style="font-size:0.9rem;font-weight:600;letter-spacing:0.05em;'
+        'text-transform:uppercase;color:#6b7280 !important;margin-bottom:0.25rem;">'
         'The Metropolitan Museum of Art</div>',
         unsafe_allow_html=True
     )
-    st.markdown(
-        '<div style="font-family:Cormorant Garamond,serif;font-size:3rem;'
-        'font-weight:300;color:#1C1C1C !important;line-height:1.1;margin-bottom:0.5rem;">'
-        'Your Personal Tour</div>',
-        unsafe_allow_html=True
-    )
+    st.markdown('<div class="main-title">🗺️ Your Personal Tour</div>', unsafe_allow_html=True)
 
     # Taste profile chips
     liked_ids   = [i for i, v in st.session_state.ratings.items() if v >= 1]
@@ -1105,9 +1098,8 @@ elif st.session_state.phase == 'results':
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
     # ── SECTION 1: Must-Sees ───────────────────────────────────────────────────
-    st.markdown('<div class="section-label">Non-Negotiables · Always Included</div>', unsafe_allow_html=True)
-    st.markdown("### ⭐ Must-See Masterpieces")
-    st.caption("These iconic works are part of your tour regardless of your ratings.")
+    st.markdown('<div class="section-header">⭐ Must-See Masterpieces</div>', unsafe_allow_html=True)
+    st.caption("Iconic works automatically included in your tour — curated by the Met and art history.")
 
     if must_sees is not None and not must_sees.empty:
         ms_cols = st.columns(3)
@@ -1132,11 +1124,11 @@ elif st.session_state.phase == 'results':
                     st.markdown(f"[Met ↗]({row['met_url']})")
                 st.markdown("---")
 
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown("---")
 
     # ── SECTION 2: Personalised Recommendations ───────────────────────────────
-    st.markdown('<div class="section-label">Personalised · Based on Your Taste</div>', unsafe_allow_html=True)
-    st.markdown("### 🎯 Recommended For You")
+    st.markdown('<div class="section-header">🎯 Recommended For You</div>', unsafe_allow_html=True)
+    st.caption("Ranked by predicted enjoyment based on your taste profile.")
 
     # Filters
     fcol1, fcol2 = st.columns([2, 1])
@@ -1222,12 +1214,11 @@ elif st.session_state.phase == 'results':
                 if row.get('met_url', '') and str(row['met_url']) not in ['', 'nan']:
                     st.markdown(f"[View on Met website ↗]({row['met_url']})")
 
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown("---")
 
     # ── SECTION 3: Gallery Roadmap ─────────────────────────────────────────────
-    st.markdown('<div class="section-label">Gallery-by-Gallery · Walking Order</div>', unsafe_allow_html=True)
-    st.markdown("### 🗺️ Your Tour Roadmap")
-    st.caption("Your full tour organised by gallery. Visit in this order for the best experience.")
+    st.markdown('<div class="section-header">🗺️ Your Gallery Roadmap</div>', unsafe_allow_html=True)
+    st.caption("Your full tour organised by gallery — visit in this order for the best experience.")
 
     # Combine must-sees + top recs
     ms_ids      = must_sees['id'].tolist() if must_sees is not None and not must_sees.empty else []
@@ -1283,22 +1274,21 @@ elif st.session_state.phase == 'results':
 
                 with rc3:
                     if is_ms:
-                        st.markdown('<span class="gold-badge">Must See</span>', unsafe_allow_html=True)
+                        st.markdown('<span class="badge-must-see">Must See</span>', unsafe_allow_html=True)
                     else:
-                        st.markdown(f"**{row['predicted_score']:.0%}**")
+                        st.markdown(f'<span class="score-display">{row["predicted_score"]:.0%}</span>', unsafe_allow_html=True)
                         st.caption("match")
                     if row.get('met_url', '') and str(row['met_url']) not in ['', 'nan']:
                         st.markdown(f"[Met ↗]({row['met_url']})")
 
                 st.markdown("---")
 
-    # Tour summary
+    # Tour summary — v2 dark navy style
     st.markdown(
-        f'<div style="background:linear-gradient(135deg,#1C1C1C,#2D2416);'
-        f'border-radius:12px;padding:1.5rem 2rem;color:white;margin:1rem 0;">'
-        f'<div style="font-family:Cormorant Garamond,serif;font-size:1.4rem;'
-        f'color:#F5E6C8;margin-bottom:0.5rem;">Your Complete Tour</div>'
-        f'<div style="color:#C8B89A;font-size:0.9rem;">'
+        f'<div class="tour-summary">'
+        f'<div style="font-family:Playfair Display,serif;font-size:1.3rem;'
+        f'color:#E0E7FF !important;margin-bottom:0.5rem;font-weight:700;">Your Complete Tour</div>'
+        f'<div style="color:#C7D2FE !important;font-size:0.9rem;">'
         f'⏱️ &nbsp;{total_time} minutes total &nbsp;·&nbsp; '
         f'🖼️ &nbsp;{total_works} artworks &nbsp;·&nbsp; '
         f'🏛️ &nbsp;{len(dept_summary)} galleries'
@@ -1306,7 +1296,7 @@ elif st.session_state.phase == 'results':
         unsafe_allow_html=True
     )
 
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown("---")
 
     col_b1, col_b2 = st.columns(2)
     with col_b1:
