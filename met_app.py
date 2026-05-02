@@ -264,13 +264,11 @@ df = pd.read_csv('met_artworks_clean.csv')
 
     # ── FIX 1: Rename columns to match what the app expects ───────────────────
     df = df.rename(columns={
-    # Normalise column names
-    renames = {
-'objectID':          'id',
-'artistDisplayName': 'artist',
-'primaryImageSmall': 'image_url',
-'objectURL':         'met_url',
-'isHighlight':       'is_highlight',
+    'objectID': 'id',
+    'artistDisplayName': 'artist',
+    'primaryImageSmall': 'image_url',
+    'objectURL': 'met_url',
+    'isHighlight': 'is_highlight'
     })
 
     # Ensure id is string for consistent matching
