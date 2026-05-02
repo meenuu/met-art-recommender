@@ -1,4 +1,4 @@
-# 🎨 Met Museum Personalised Art Tour Generator
+# 🏛️ Met Museum Personalised Art Tour Generator
 
 A machine learning web app that learns your art taste in real time and generates a personalised tour of the Metropolitan Museum of Art — with SHAP-powered explanations for every recommendation.
 
