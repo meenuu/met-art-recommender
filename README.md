@@ -2,7 +2,7 @@
 
 A machine learning web app that learns your art taste in real time and generates a personalised tour of the Metropolitan Museum of Art — with SHAP-powered explanations for every recommendation.
 
-**Live demo:** [your-app-url.streamlit.app](https://your-app-url.streamlit.app)
+**Live demo:** https://met-art-recommender-ymje5stff6zbqmqpwexsxb.streamlit.app/
 
 ---
 
